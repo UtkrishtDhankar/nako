@@ -212,7 +212,5 @@ char *sha1(const char *file_name)
 	free(hash);
 	free(message);
 
-	printf("%s\n", hash_string);
-
 	return hash_string;
 }
