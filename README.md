@@ -1,0 +1,2 @@
+# nako
+Version Control, simplified.
