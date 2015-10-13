@@ -204,7 +204,7 @@ char *sha1(const char *file_name)
 	uint32_t *hash = sha1_from_chunks(chunks, num_chunks);
 
 	char *hash_string = malloc (41 * sizeof(*hash_string));
-	sprintf(hash_string, "%8x%8x%8x%8x%8x", hash[0], hash[1], hash[2], hash[3], hash[4]);
+	sprintf(hash_string, "%08x%08x%08x%08x%08x", hash[0], hash[1], hash[2], hash[3], hash[4]);
 
 	for (int i = 0; i < num_chunks; i++)
 		free(chunks[i]);
