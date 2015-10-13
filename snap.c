@@ -86,7 +86,15 @@ char *snap_dir(const char *dir_name)
 			strcpy(buf, dir_name);
 			strcat(buf, "/");
 			strcat(buf, dp->d_name);
-			dir_contents[i++] = snap_file(buf);
+			char *hash = snap_file(buf);
+
+			dir_contents[i] = malloc((strlen(hash) + 1 + strlen(dp->d_name) + 1) * sizeof(*dir_contents[i]));
+			strcpy(dir_contents[i], hash);
+			strcat(dir_contents[i], " ");
+			strcat(dir_contents[i], dp->d_name);
+
+			i++;
+			free(hash);
 			free(buf);
 		} else if (dp->d_type == DT_DIR) {
 			if (strcmp(dp->d_name, ".")     == 0 ||
@@ -96,7 +104,15 @@ char *snap_dir(const char *dir_name)
 			strcpy(buf, dir_name);
 			strcat(buf, "/");
 			strcat(buf, dp->d_name);
-			dir_contents[i++] = snap_dir(buf);
+			char *hash = snap_dir(buf);
+
+			dir_contents[i] = malloc((strlen(hash) + 1 + strlen(dp->d_name) + 1) * sizeof(*dir_contents[i]));
+			strcpy(dir_contents[i], hash);
+			strcat(dir_contents[i], " ");
+			strcat(dir_contents[i], dp->d_name);
+
+			i++;
+			free(hash);
 			free(buf);
 		}
 	}
@@ -128,11 +144,27 @@ char *snap(char **file_names, const int num_files,
 	char **snap_contents = malloc((num_files + num_dirs + 1) * sizeof(*snap_contents));
 	int counter = 0;
 	for (int i = 0; i < num_files; i++) {
-		snap_contents[counter++] = snap_file(file_names[i]);
+		char *hash = snap_file(file_names[i]);
+
+		snap_contents[counter] = malloc((strlen(hash) + 1 + strlen(file_names[i]) + 1) * sizeof(*snap_contents[counter]));
+		strcpy(snap_contents[counter], hash);
+		strcat(snap_contents[counter], " ");
+		strcat(snap_contents[counter], file_names[i]);
+		counter++;
+
+		free(hash);
 	}
 
 	for (int i = 0; i < num_dirs; i++) {
-		snap_contents[counter++] = snap_dir(dir_names[i]);
+		char *hash = snap_dir(dir_names[i]);
+
+		snap_contents[counter] = malloc((strlen(hash) + 1 + strlen(dir_names[i]) + 1) * sizeof(*snap_contents[counter]));
+		strcpy(snap_contents[counter], hash);
+		strcat(snap_contents[counter], " ");
+		strcat(snap_contents[counter], dir_names[i]);
+		counter++;
+
+		free(hash);
 	}
 
 	FILE *f = fopen(".nako/snaps/temp", "w");
