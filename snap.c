@@ -1,9 +1,4 @@
-#include <stdio.h>
-#include <string.h>
-
-#include <dirent.h>
-
-#include "sha1.h"
+#include "snap.h"
 
 /* http://stackoverflow.com/questions/1121383/counting-the-number-of-files-in-a-directory-using-c */
 int get_num_files(DIR *dirp)
@@ -188,7 +183,7 @@ char *snap(char **file_names, const int num_files,
 	return hash;
 }
 
-int main(int argc, char **argv)
+void snap_all(char *message)
 {
 	DIR *root = opendir(".");
 
@@ -221,7 +216,7 @@ int main(int argc, char **argv)
 			dir_id++;
 		}
 	}
-	char *snap_hash = snap(files, num_files, dirs, num_dirs, argv[1]);
+	char *snap_hash = snap(files, num_files, dirs, num_dirs, message);
 
 	printf("New snap - %s - made\n", snap_hash);
 
@@ -234,6 +229,4 @@ int main(int argc, char **argv)
 
 	free(files);
 	free(dirs);
-
-	return 0;
 }
