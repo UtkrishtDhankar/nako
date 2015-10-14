@@ -1,5 +1,4 @@
-#include <stdio.h>
-#include <sys/stat.h>
+#include "init.h"
 
 int init_repo()
 {
@@ -16,9 +15,4 @@ int init_repo()
 
 		return 0;
 	}
-}
-
-int main()
-{
-	return init_repo();
 }
