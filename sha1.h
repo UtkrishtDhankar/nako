@@ -1,10 +1,10 @@
 #ifndef SHA1_H
 #define SHA1_H
 
+#include <openssl/sha.h>
 #include <stdio.h>
-#include <string.h>
-#include <stdint.h>
 #include <stdlib.h>
+#include <string.h>
 
 /*
  * Returns a hash of the file named file_name
