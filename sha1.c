@@ -43,6 +43,7 @@ char *sha1(const char *file_name)
 
 	unsigned char *hash = malloc(SHA_DIGEST_LENGTH * sizeof(*hash));
 	SHA1(message, message_size_bytes, hash);
+	free(message);
 
 	char *hash_string = malloc(41 * sizeof(*hash_string));
 	create_hash_string(hash_string, hash);
