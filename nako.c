@@ -2,6 +2,7 @@
 #include <stdlib.h>
 
 #include "init.h"
+#include "switch.h"
 #include "snap.h"
 
 int print_usage()
@@ -21,11 +22,11 @@ int main(int argc, char *argv[])
 		else if (strcmp(argv[1], "destage") == 0)
 			;
 		else if (strcmp(argv[1], "snap") == 0)
-			snap_all("Test"); 
+			snap_all("Test");
 		else if (strcmp(argv[1], "branch") == 0)
 			;
 		else if (strcmp(argv[1], "switch") == 0)
-			;
+			switch_to_commit(argv[2]);
 		else if (strcmp(argv[1], "merge") == 0)
 			;
 		else
