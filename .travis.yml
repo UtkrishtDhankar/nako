@@ -1,0 +1,3 @@
+language: c
+install: true
+script:  gcc nako.c sha1.c snap.c init.c -lcrypto -std=gnu99 -Wall
