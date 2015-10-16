@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
 		else if (strcmp(argv[1], "branch") == 0)
 			;
 		else if (strcmp(argv[1], "switch") == 0)
-			switch_to_commit(argv[2]);
+			switch_to_snap(argv[2]);
 		else if (strcmp(argv[1], "merge") == 0)
 			;
 		else

@@ -1,6 +1,9 @@
 #ifndef SWITCH_H
 #define SWITCH_H
 
-void switch_to_commit(const char *commit_hash);
+#include <stdio.h>
+#include <stdlib.h>
+
+void switch_to_snap(const char *snap_hash);
 
 #endif
