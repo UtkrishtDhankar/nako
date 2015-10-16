@@ -31,7 +31,7 @@ char *sha1(const char *file_name)
 	/* Open the file requested by the user and find its file size. */
 	FILE *input_file = fopen(file_name, "r");
 
-	uint64_t message_size_bytes = get_file_size(input_file);
+	size_t message_size_bytes = get_file_size(input_file);
 
 	/* We need to store the contents of the file in a string to further.
 	   The string needs to be as long as it is to have enough space for the
