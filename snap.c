@@ -200,7 +200,7 @@ void snap_all(char *message)
 	struct dirent *dp;
 	while ((dp = readdir(root)) != NULL) {
 		if (dp->d_type == DT_REG) {
-			files[file_id] = malloc((dp->d_namlen + 1)
+			files[file_id] = malloc((strlen(dp->d_name) + 1)
 						* sizeof (*files[file_id]));
 			strcpy(files[file_id], dp->d_name);
 			file_id++;
@@ -210,7 +210,7 @@ void snap_all(char *message)
 			    strcmp(dp->d_name, "..")    == 0)
 				continue;
 
-			dirs[dir_id] = malloc((dp->d_namlen + 1)
+			dirs[dir_id] = malloc((strlen(dp->d_name) + 1)
 						* sizeof (*dirs[dir_id]));
 			strcpy(dirs[dir_id], dp->d_name);
 			dir_id++;
