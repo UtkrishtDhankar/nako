@@ -1,5 +1,14 @@
 #include "switch.h"
 
+/*
+ * Restores an object to the current directory
+ * Here, snap_line is the snap of the
+ */
+static inline void restore_object(const char *snap_line)
+{
+
+}
+
 void switch_to_snap(const char *snap_hash)
 {
 	char *snap_file_name;
@@ -10,8 +19,13 @@ void switch_to_snap(const char *snap_hash)
 	if (snap_file == NULL)
 		exit(1);
 
-	char ch;
-	while ((ch = getc(snap_file)) != EOF) {
-		putc(ch, stdout);
+	char   *line   = NULL;
+	size_t linecap = 0;
+	while (getline(&line, &linecap, snap_file) != -1) {
+		restore_object(line);
 	}
+
+	fclose(snap_file);
+	free(snap_file_name);
+	free(line);
 }
