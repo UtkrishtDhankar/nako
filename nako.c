@@ -6,9 +6,10 @@
 
 int print_usage()
 {
-		printf("nako <command> [arguments]\n");
-		return EXIT_SUCCESS;
+	printf("nako <command> [arguments]\n");
+	return EXIT_SUCCESS;
 }
+
 int main(int argc, char *argv[])
 {
 	if (argc > 1) {
@@ -21,7 +22,7 @@ int main(int argc, char *argv[])
 		else if (strcmp(argv[1], "destage") == 0)
 			;
 		else if (strcmp(argv[1], "snap") == 0)
-			snap_all("Test"); 
+			snap_all("Test");
 		else if (strcmp(argv[1], "branch") == 0)
 			;
 		else if (strcmp(argv[1], "switch") == 0)
@@ -31,5 +32,6 @@ int main(int argc, char *argv[])
 		else
 			print_usage();
 	}
+
 	return EXIT_SUCCESS;
 }
