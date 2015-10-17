@@ -6,6 +6,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define HASH_STRING_SIZE 40
+
 /*
  * Returns a hash of the file named file_name
  */

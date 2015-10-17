@@ -6,9 +6,10 @@
 
 int print_usage()
 {
-		printf("nako <command> [arguments]\n");
-		return EXIT_SUCCESS;
+	printf("nako <command> [arguments]\n");
+	return EXIT_SUCCESS;
 }
+
 int main(int argc, char *argv[])
 {
 	if (argc > 1) {
@@ -31,5 +32,6 @@ int main(int argc, char *argv[])
 		else
 			print_usage();
 	}
+
 	return EXIT_SUCCESS;
 }

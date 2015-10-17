@@ -105,10 +105,12 @@ char *snap_dir(const char *dir_name)
 
 	FILE *f = fopen(".nako/objects/temp", "w");
 	fprintf(f, "%s\n", dir_name);
+
 	for (int j = 0; j < i; j++) {
 		fprintf(f, "%s\n", dir_contents[j]);
 		free(dir_contents[j]);
 	}
+
 	free(dir_contents);
 	fclose(f);
 
@@ -151,10 +153,12 @@ char *snap(char **file_names, const int num_files,
 
 	FILE *f = fopen(".nako/snaps/temp", "w");
 	fprintf(f, "%s\n", message);
+
 	for (int j = 0; j < counter; j++) {
 		fprintf(f, "%s\n", snap_contents[j]);
 		free(snap_contents[j]);
 	}
+
 	free(snap_contents);
 	fclose(f);
 
@@ -211,6 +215,7 @@ void snap_all(char *message)
 
 	for (int i = 0; i < num_files; i++)
 		free(files[i]);
+
 	for (int i = 0; i < num_dirs; i++)
 		free(dirs[i]);
 
