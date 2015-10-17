@@ -117,16 +117,19 @@ char *snap_dir(const char *dir_name)
 
 	FILE *f = fopen(".nako/objects/temp", "w");
 	fprintf(f, "%s\n", dir_name);
+
 	for (int j = 0; j < i; j++) {
 		fprintf(f, "%s\n", dir_contents[j]);
 		free(dir_contents[j]);
 	}
+
 	free(dir_contents);
 	fclose(f);
 
 	char *hash = sha1(".nako/objects/temp");
 
-	char *dir_file_name = malloc ((14 + 40 + 1) * sizeof(*dir_file_name));
+	char *dir_file_name = malloc((14 + HASH_STRING_SIZE + 1) *
+				     sizeof(*dir_file_name));
 	strcpy(dir_file_name, ".nako/objects/");
 	strcat(dir_file_name, hash);
 
@@ -172,16 +175,19 @@ char *snap(char **file_names, const int num_files,
 
 	FILE *f = fopen(".nako/snaps/temp", "w");
 	fprintf(f, "%s\n", message);
+
 	for (int j = 0; j < counter; j++) {
 		fprintf(f, "%s\n", snap_contents[j]);
 		free(snap_contents[j]);
 	}
+
 	free(snap_contents);
 	fclose(f);
 
 	char *hash = sha1(".nako/snaps/temp");
 
-	char *snap_file_name = malloc ((12 + 40 + 1) * sizeof(*snap_file_name));
+	char *snap_file_name = malloc((12 + HASH_STRING_SIZE + 1)
+				      * sizeof(*snap_file_name));
 	strcpy(snap_file_name, ".nako/snaps/");
 	strcat(snap_file_name, hash);
 
