@@ -1,5 +1,6 @@
 #ifndef SNAP_H
 #define SNAP_H
+#define _GNU_SOURCE
 
 #include <stdio.h>
 #include <string.h>
