@@ -5,11 +5,10 @@ int get_num_files(DIR *dirp)
 {
 	int num_files = 0;
 	struct dirent *entry;
-	while ((entry = readdir(dirp)) != NULL) {
-		if (entry->d_type == DT_REG) {
+
+	while ((entry = readdir(dirp)) != NULL)
+		if (entry->d_type == DT_REG)
 			num_files++;
-		}
-	}
 
 	rewinddir(dirp);
 
@@ -21,11 +20,10 @@ int get_num_dirs(DIR *dirp)
 {
 	int num_dirs = 0;
 	struct dirent *entry;
-	while ((entry = readdir(dirp)) != NULL) {
-		if (entry->d_type == DT_DIR) {
+
+	while ((entry = readdir(dirp)) != NULL)
+		if (entry->d_type == DT_DIR)
 			num_dirs++;
-		}
-	}
 
 	rewinddir(dirp);
 
@@ -36,7 +34,8 @@ int get_num_dirs(DIR *dirp)
 
 /* FIXME add a list of ignored directories and files */
 
-char *snap_file(const char *file_name) {
+char *snap_file(const char *file_name)
+{
 	char *file_hash = sha1(file_name);
 	/* 14 bytes for ".nako/objects/", rest for hash and '\0'. */
 	char *object_path = malloc((14 + strlen(file_hash) + 1) * sizeof(*object_path));
@@ -48,9 +47,8 @@ char *snap_file(const char *file_name) {
 	FILE *object_file = fopen(object_path, "wx");
 	if (object_file != NULL) {
 		char ch;
-		while ((ch = getc(input_file)) != EOF) {
+		while ((ch = getc(input_file)) != EOF)
 			putc(ch, object_file);
-		}
 
 		fclose(object_file);
 	} else {
@@ -198,20 +196,21 @@ void snap_all(char *message)
 	int dir_id = 0;
 
 	struct dirent *dp;
+
 	while ((dp = readdir(root)) != NULL) {
 		if (dp->d_type == DT_REG) {
 			files[file_id] = malloc((strlen(dp->d_name) + 1)
-						* sizeof (*files[file_id]));
+						* sizeof(*files[file_id]));
 			strcpy(files[file_id], dp->d_name);
 			file_id++;
 		} else if (dp->d_type == DT_DIR) {
-			if (strcmp(dp->d_name, ".nako") == 0||
-			    strcmp(dp->d_name, ".")     == 0||
+			if (strcmp(dp->d_name, ".nako") == 0 ||
+			    strcmp(dp->d_name, ".")     == 0 ||
 			    strcmp(dp->d_name, "..")    == 0)
 				continue;
 
 			dirs[dir_id] = malloc((strlen(dp->d_name) + 1)
-						* sizeof (*dirs[dir_id]));
+					      * sizeof(*dirs[dir_id]));
 			strcpy(dirs[dir_id], dp->d_name);
 			dir_id++;
 		}
