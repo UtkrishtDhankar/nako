@@ -1,5 +1,6 @@
 #ifndef SHA1_H
 #define SHA1_H
+#define _GNU_SOURCE
 
 #include <openssl/sha.h>
 #include <stdio.h>
