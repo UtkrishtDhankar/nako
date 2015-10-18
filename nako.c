@@ -5,11 +5,16 @@
 #include "switch.h"
 #include "snap.h"
 
-int print_usage()
+void print_usage()
 {
-		printf("nako <command> [arguments]\n");
-		return EXIT_SUCCESS;
+	printf("Usage:	nako <command> [arguments]\n");
 }
+
+void print_snap_usage()
+{
+	printf("Usage:	nako snap <message>\n");
+}
+
 int main(int argc, char *argv[])
 {
 	if (argc > 1) {
@@ -21,9 +26,12 @@ int main(int argc, char *argv[])
 			;
 		else if (strcmp(argv[1], "destage") == 0)
 			;
-		else if (strcmp(argv[1], "snap") == 0)
-			snap_all(argv[2]);
-		else if (strcmp(argv[1], "branch") == 0)
+		else if (strcmp(argv[1], "snap") == 0) {
+			if (argv[2] == NULL)
+				print_snap_usage();
+			else
+				snap_all(argv[2]);
+		} else if (strcmp(argv[1], "branch") == 0)
 			;
 		else if (strcmp(argv[1], "switch") == 0)
 			switch_to_snap(argv[2]);
@@ -31,6 +39,8 @@ int main(int argc, char *argv[])
 			;
 		else
 			print_usage();
-	}
+	} else
+		print_usage();
+
 	return EXIT_SUCCESS;
 }
