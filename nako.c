@@ -12,7 +12,7 @@ int print_usage()
 
 void print_snap_usage()
 {
-	printf("Usage:	nako snap <\"message\">\n");
+	printf("Usage:	nako snap <message>\n");
 }
 
 int main(int argc, char *argv[])
@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
 				print_snap_usage();
 			else
 				snap_all(argv[2]);
-		}else if (strcmp(argv[1], "branch") == 0)
+		} else if (strcmp(argv[1], "branch") == 0)
 			;
 		else if (strcmp(argv[1], "switch") == 0)
 			;
