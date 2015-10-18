@@ -13,7 +13,7 @@ clean: clean-objects
 
 # only removes objects, not final executable
 clean-objects:
-	$(RM) $(RMFLAGS) init.o snap.o nako.o sha1.o
+	$(RM) $(RMFLAGS) *.o
 
 debug: CFLAGS+=-g -Werror
 debug: all
