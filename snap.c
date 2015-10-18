@@ -154,6 +154,10 @@ char *snap(char **file_names, const int num_files,
 	FILE *f = fopen(".nako/snaps/temp", "w");
 	fprintf(f, "%s\n", message);
 
+	time_t current_time = time(NULL);
+	fprintf(f, "%ld\n", current_time);
+
+
 	for (int j = 0; j < counter; j++) {
 		fprintf(f, "%s\n", snap_contents[j]);
 		free(snap_contents[j]);
