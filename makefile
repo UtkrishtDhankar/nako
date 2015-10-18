@@ -7,6 +7,12 @@ DFLAGS=-g -Werror
 RM=rm
 RMFLAGS=-f
 
+# Source files in the project. Append new files here.
+SRCS=init.c snap.c nako.c sha1.c
+
+# Create object files list from source files list.
+OBJS= $(SRCS:.c=.o)
+
 all: nako
 all: clean-objects
 
@@ -22,17 +28,12 @@ debug: CFLAGS+=$(DFLAGS)
 debug: LFLAGS+=$(DFLAGS)
 debug: all
 
-nako: init.o snap.o nako.o sha1.o
-	$(CC) $(LFLAGS) init.o snap.o sha1.o nako.o -o nako
+nako: $(OBJS)
+	$(CC) $(LFLAGS) $(OBJS) -o nako
 
-init.o:
-	$(CC) $(CFLAGS) init.c -o init.o
-
-snap.o:
-	$(CC) $(CFLAGS) snap.c -o snap.o
-
-sha1.o:
-	$(CC) $(CFLAGS) sha1.c -o sha1.o
-
-nako.o:
-	$(CC) $(CFLAGS) nako.c -o nako.o
+# the following magic code is from here:
+# http://www.cs.swarthmore.edu/~newhall/unixhelp/howto_makefiles.html
+#
+# Use with care. This automatically builds all .c files inside the folder.
+.c.o:
+	$(CC) $(CFLAGS) $<  -o $@
