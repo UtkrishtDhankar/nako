@@ -128,7 +128,7 @@ char *snap(char **file_names, const int num_files,
 	   char **dir_names,  const int num_dirs,
 	   const char *message)
 {
-	char **snap_contents = malloc((num_files + num_dirs + 1) * sizeof(*snap_contents));
+	char **snap_contents = malloc(((num_files + num_dirs) * sizeof(*snap_contents)));
 	int counter = 0;
 
 	for (int i = 0; i < num_files; i++) {
@@ -153,6 +153,10 @@ char *snap(char **file_names, const int num_files,
 
 	FILE *f = fopen(".nako/snaps/temp", "w");
 	fprintf(f, "%s\n", message);
+
+	time_t current_time = time(NULL);
+	fprintf(f, "%ld\n", current_time);
+
 
 	for (int j = 0; j < counter; j++) {
 		fprintf(f, "%s\n", snap_contents[j]);
