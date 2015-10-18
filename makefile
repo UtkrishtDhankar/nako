@@ -15,7 +15,7 @@ clean: clean-objects
 clean-objects:
 	$(RM) $(RMFLAGS) init.o snap.o nako.o sha1.o
 
-debug: CFLAGS+=-g
+debug: CFLAGS+=-g -Werror
 debug: all
 
 nako: init.o snap.o nako.o
