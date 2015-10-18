@@ -18,13 +18,13 @@ clean-objects:
 debug: CFLAGS+=-g -Werror
 debug: all
 
-nako: init.o snap.o nako.o
+nako: init.o snap.o nako.o sha1.o
 	$(CC) $(CFLAGS) init.o snap.o sha1.o nako.o -o nako
 
 init.o:
 	$(CC) $(CFLAGS) -c init.c -o init.o
 
-snap.o: sha1.o
+snap.o:
 	$(CC) $(CFLAGS) -c snap.c -o snap.o
 
 sha1.o:
