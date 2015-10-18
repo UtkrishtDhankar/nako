@@ -4,10 +4,9 @@
 #include "init.h"
 #include "snap.h"
 
-int print_usage()
+void print_usage()
 {
-	printf("nako <command> [arguments]\n");
-	return EXIT_SUCCESS;
+	printf("Usage:	nako <command> [arguments]\n");
 }
 
 void print_snap_usage()
@@ -39,7 +38,8 @@ int main(int argc, char *argv[])
 			;
 		else
 			print_usage();
-	}
+	} else
+		print_usage();
 
 	return EXIT_SUCCESS;
 }
