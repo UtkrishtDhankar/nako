@@ -1,8 +1,17 @@
 CC=gcc
-CFLAGS=-Wall -std=gnu99
+CFLAGS=-c -Wall -std=gnu99
+LFLAGS=-Wall -std=gnu99
+
+DFLAGS=-g -Werror
 
 RM=rm
 RMFLAGS=-f
+
+# Source files in the project. Append new files here.
+SRCS=init.c snap.c nako.c sha1.c
+
+# Create object files list from source files list.
+OBJS= $(SRCS:.c=.o)
 
 all: nako
 all: clean-objects
@@ -13,22 +22,18 @@ clean: clean-objects
 
 # only removes objects, not final executable
 clean-objects:
-	$(RM) $(RMFLAGS) init.o snap.o nako.o sha1.o
+	$(RM) $(RMFLAGS) *.o
 
-debug: CFLAGS+=-g -Werror
+debug: CFLAGS+=$(DFLAGS)
+debug: LFLAGS+=$(DFLAGS)
 debug: all
 
-nako: init.o snap.o nako.o
-	$(CC) $(CFLAGS) init.o snap.o sha1.o nako.o -o nako
+nako: $(OBJS)
+	$(CC) $(LFLAGS) $(OBJS) -o nako
 
-init.o:
-	$(CC) $(CFLAGS) -c init.c -o init.o
-
-snap.o: sha1.o
-	$(CC) $(CFLAGS) -c snap.c -o snap.o
-
-sha1.o:
-	$(CC) $(CFLAGS) -c sha1.c -o sha1.o
-
-nako.o:
-	$(CC) $(CFLAGS) -c nako.c -o nako.o
+# the following magic code is from here:
+# http://www.cs.swarthmore.edu/~newhall/unixhelp/howto_makefiles.html
+#
+# Use with care. This automatically builds all .c files inside the folder.
+.c.o:
+	$(CC) $(CFLAGS) $<  -o $@
