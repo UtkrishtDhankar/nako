@@ -58,6 +58,11 @@ void show_commits()
 			fscanf(snaps[counter].file, "%s",
 				snaps[counter].time_str);
 
+			counter++;
+		}
+	}
+
+	for (counter = 0; counter < num_files; counter++) {
 			printf("%s @ %s s - %s\n", snaps[counter].hash,
 				snaps[counter].time_str,
 				snaps[counter].message);
@@ -65,8 +70,5 @@ void show_commits()
 			free(snaps[counter].time_str);
 			free(snaps[counter].message);
 			free(snaps[counter].hash);
-
-			counter++;
-		}
 	}
 }
