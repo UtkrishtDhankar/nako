@@ -2,7 +2,7 @@
 
 int init_repo()
 {
-	struct stat st = { 0 };
+	struct stat st;
 
 	if (stat(".nako", &st) != -1) {
 		printf("Error, there is already a repo in this directory\n");

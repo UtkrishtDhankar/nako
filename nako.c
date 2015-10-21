@@ -3,6 +3,7 @@
 
 #include "init.h"
 #include "snap.h"
+#include "log.h"
 
 void print_usage()
 {
@@ -36,6 +37,8 @@ int main(int argc, char *argv[])
 			;
 		else if (strcmp(argv[1], "merge") == 0)
 			;
+		else if (strcmp(argv[1], "log") == 0)
+			show_commits();
 		else
 			print_usage();
 	} else
