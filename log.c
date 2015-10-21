@@ -73,8 +73,13 @@ void show_commits()
 	qsort(snaps, num_files, sizeof(*snaps), &snapcmp);
 
 	for (counter = 0; counter < num_files; counter++) {
+			time_t snap_time = atol(snaps[counter].time_str);
+			struct tm *lt = localtime(&snap_time);
+			char time_str[80];
+			strftime(time_str, 80, "%c", lt);
+
 			printf("%s @ %s s - %s\n", snaps[counter].hash,
-				snaps[counter].time_str,
+				time_str,
 				snaps[counter].message);
 
 			free(snaps[counter].time_str);
