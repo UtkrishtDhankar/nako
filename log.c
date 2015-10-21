@@ -14,7 +14,7 @@ static int snapcmp(const void *a, const void *b)
 	const struct snap *s1 = a;
 	const struct snap *s2 = b;
 	
-	return strcmp(s1->time_str, s2->time_str);
+	return -strcmp(s1->time_str, s2->time_str);
 }
 
 inline static int get_num_files(DIR *dirp)
