@@ -9,7 +9,7 @@ struct snap {
 	                   of the snap */
 };
 
-int snapcmp(const void *a, const void *b) 
+static int snapcmp(const void *a, const void *b) 
 {
 	const struct snap *s1 = a;
 	const struct snap *s2 = b;
@@ -17,7 +17,7 @@ int snapcmp(const void *a, const void *b)
 	return strcmp(s1->time_str, s2->time_str);
 }
 
-static inline int get_num_files(DIR *dirp)
+inline static int get_num_files(DIR *dirp)
 {
 	int num_files = 0;
 	struct dirent *entry;
