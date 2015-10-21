@@ -78,7 +78,7 @@ void show_commits()
 			char time_str[80];
 			strftime(time_str, 80, "%c", lt);
 
-			printf("%s @ %s s - %s\n", snaps[counter].hash,
+			printf("%.10s @ %s - %s\n", snaps[counter].hash,
 				time_str,
 				snaps[counter].message);
 
