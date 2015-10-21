@@ -9,6 +9,14 @@ struct snap {
 	                   of the snap */
 };
 
+int snapcmp(const void *a, const void *b) 
+{
+	const struct snap *s1 = a;
+	const struct snap *s2 = b;
+	
+	return strcmp(s1->time_str, s2->time_str);
+}
+
 static inline int get_num_files(DIR *dirp)
 {
 	int num_files = 0;
@@ -61,6 +69,8 @@ void show_commits()
 			counter++;
 		}
 	}
+
+	qsort(snaps, num_files, sizeof(*snaps), &snapcmp);
 
 	for (counter = 0; counter < num_files; counter++) {
 			printf("%s @ %s s - %s\n", snaps[counter].hash,
