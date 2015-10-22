@@ -3,12 +3,12 @@
 #define KILOBYTE      1024
 #define HASH_STR_SIZE 40
 
-/* 
+/*
  * Writes the full name of the file (relative to project parent directory)
- * to a char pointer on the heap. Remember to free this object after 
+ * to a char pointer on the heap. Remember to free this object after
  * calling this function
  */
-static inline char *extract_name(const char *snap_line) 
+static inline char *extract_name(const char *snap_line)
 {
 	/* Allocating 1 KB of memory for object name. Will reallocate more
 	   space if needed. */
