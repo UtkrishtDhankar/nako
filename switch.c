@@ -17,6 +17,7 @@ static inline char *extract_name(const char *snap_line)
 	int snap_pos = HASH_STR_SIZE;
 	int name_pos = 0;
 	int name_size = KILOBYTE;
+
 	while(snap_line[snap_pos++] != '\n') {
 		object_name[name_pos++] = snap_line[snap_pos];
 		if (name_pos >= name_size) {
@@ -34,7 +35,8 @@ static inline char *extract_name(const char *snap_line)
 
 /*
  * Restores an object to the current directory
- * Here, snap_line is the line containing the hash and the name of the object
+ * Here, snap_line is the line containing the hash and 
+ * the name of the object.
  */
 static void restore_object(const char *snap_line)
 {
@@ -71,6 +73,7 @@ void switch_to_snap(const char *snap_hash)
 	}
 
 	fclose(snap_file);
+
 	free(snap_file_name);
 	free(line);
 }
