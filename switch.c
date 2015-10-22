@@ -17,13 +17,17 @@ static inline char *extract_name(const char *snap_line)
 	int snap_pos = HASH_STR_SIZE;
 	int name_pos = 0;
 	int name_size = KILOBYTE;
-	while(snap_line[snap_pos++] != '\0') {
+	while(snap_line[snap_pos++] != '\n') {
 		object_name[name_pos++] = snap_line[snap_pos];
 		if (name_pos >= name_size) {
 			object_name = realloc(object_name,
 				name_size + KILOBYTE);
 		}
 	}
+
+	/* Overwrite the '\n' at the end of the name with '\0' to
+	terminate the string. */
+	object_name[name_pos - 1] = '\0';
 
 	return object_name;
 }
@@ -40,7 +44,7 @@ static void restore_object(const char *snap_line)
 
 	char *object_name = extract_name(snap_line);
 
-	printf("HASH - %s\nNAME - %s", hash, object_name);
+	printf("HASH - %s\nNAME - %s\n", hash, object_name);
 	free(object_name);
 }
 
