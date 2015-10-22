@@ -3,7 +3,7 @@
 /*
  * Performs the left rotate operation on num by i.
  */
-static inline uint32_t left_rot (uint32_t num, short i)
+inline static uint32_t left_rot (uint32_t num, short i)
 {
 	return ((num << i) | (num >> (32 - i)));
 }
@@ -11,7 +11,7 @@ static inline uint32_t left_rot (uint32_t num, short i)
 /*
  * Creates 80 32-bit words out of the 512 bit chunk
  */
-static inline uint32_t *wordify(unsigned char *chunk)
+inline static uint32_t *wordify(unsigned char *chunk)
 {
 	uint32_t *words = malloc (80 * (sizeof(*words)));
 
@@ -131,7 +131,7 @@ static unsigned char **sha1_chunkify(const unsigned char *message,
  * The input lengths are in bytes, while the padding, in accordance with
  * the SHA1 algorithm, is done in bits.
  */
-static inline void append_msg_len(unsigned char *message,
+inline static void append_msg_len(unsigned char *message,
 			          uint64_t *message_length,
 				  uint64_t original_msglen)
 {
@@ -148,7 +148,7 @@ static inline void append_msg_len(unsigned char *message,
  * Appends enough zeroes until the message has just enough room for appending
  * the message length, i.e, length 448 mod 512
  */
-static inline void append_zeroes(unsigned char *message, uint64_t *message_length)
+inline static void append_zeroes(unsigned char *message, uint64_t *message_length)
 {
 	while (*message_length % 64 != 56) {
 		message[*message_length] = (unsigned char) 0x00;
@@ -178,7 +178,7 @@ static void sha1_pad(unsigned char *message, uint64_t *message_length)
 	append_msg_len(message, message_length, original_msglen);
 }
 
-static void inline alloc_message(unsigned char **message, const uint64_t orig_msg_len)
+inline static void alloc_message(unsigned char **message, const uint64_t orig_msg_len)
 {
 	uint64_t final_len = orig_msg_len + 64 - orig_msg_len % 64;
 

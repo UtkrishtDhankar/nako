@@ -2,13 +2,13 @@ CC=gcc
 CFLAGS=-c -Wall -std=gnu99
 LFLAGS=-Wall -std=gnu99
 
-DFLAGS=-g -Werror
+DFLAGS=-g -Wextra -Werror
 
 RM=rm
 RMFLAGS=-f
 
 # Source files in the project. Append new files here.
-SRCS=init.c snap.c nako.c sha1.c switch.c
+SRCS=init.c snap.c nako.c sha1.c switch.c log.c
 
 # Create object files list from source files list.
 OBJS= $(SRCS:.c=.o)
