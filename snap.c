@@ -181,7 +181,7 @@ static char *snap_dir(const char *dir_name)
  * General purpose function to snap the changes in given files and directories
  * with the given snap message
  */
-char *snap(char **file_names, const int num_files,
+static char *snap(char **file_names, const int num_files,
 	   char **dir_names,  const int num_dirs,
 	   const char *message)
 {
@@ -235,6 +235,9 @@ char *snap(char **file_names, const int num_files,
 	return hash;
 }
 
+/* 
+ * Snaps all the files and folders inside the project parent directory
+ */
 void snap_all(char *message)
 {
 	DIR *root = opendir(".");
