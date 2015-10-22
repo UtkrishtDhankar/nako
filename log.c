@@ -9,6 +9,9 @@ struct snap {
 	                   of the snap */
 };
 
+/*
+ * Compares two snaps for sorting.
+ */
 static int snapcmp(const void *a, const void *b) 
 {
 	const struct snap *s1 = a;
@@ -17,6 +20,9 @@ static int snapcmp(const void *a, const void *b)
 	return -strcmp(s1->time_str, s2->time_str);
 }
 
+/* 
+ * Returns the number of files inside dirp.
+ */
 inline static int get_num_files(DIR *dirp)
 {
 	int num_files = 0;
@@ -31,7 +37,29 @@ inline static int get_num_files(DIR *dirp)
 	return num_files;
 }
 
-void show_commits()
+/*
+ * Prints the snaps passed to it.
+ */
+static inline void print_snaps(const int    num_snaps, 
+			       const struct snap *snaps)
+{
+	for (int counter = 0; counter < num_snaps; counter++) {
+		time_t snap_time = atol(snaps[counter].time_str);
+		struct tm *lt = localtime(&snap_time);
+		char time_str[80];
+		strftime(time_str, 80, "%c", lt);
+
+		printf("%.10s @ %s - %s\n", snaps[counter].hash,
+			time_str,
+			snaps[counter].message);
+	}
+}
+
+/* 
+ * Prints abbreviated SHA1 hashes, time of snap and snap_messages, sorted
+ * by newest first.
+ */
+void show_snaps()
 {
 	const char *snap_dir_name = ".nako/snaps";
 
@@ -71,17 +99,10 @@ void show_commits()
 	}
 
 	qsort(snaps, num_files, sizeof(*snaps), &snapcmp);
+	
+	print_snaps(num_files, snaps);
 
 	for (counter = 0; counter < num_files; counter++) {
-			time_t snap_time = atol(snaps[counter].time_str);
-			struct tm *lt = localtime(&snap_time);
-			char time_str[80];
-			strftime(time_str, 80, "%c", lt);
-
-			printf("%.10s @ %s - %s\n", snaps[counter].hash,
-				time_str,
-				snaps[counter].message);
-
 			free(snaps[counter].time_str);
 			free(snaps[counter].message);
 			free(snaps[counter].hash);

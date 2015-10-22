@@ -14,6 +14,6 @@
 /*
  * Shows commits in chronological order.
  */
-void show_commits();
+void show_snaps();
 
 #endif
