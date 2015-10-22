@@ -43,6 +43,12 @@ void switch_to_snap(const char *snap_hash)
 
 	char   *line   = NULL;
 	size_t linecap = 0;
+
+	/* Skip over the first two lines (snap message and time) */
+	for (int i = 0; i < 2; i++) {
+		getline(&line, &linecap, snap_file);
+	}
+
 	while (getline(&line, &linecap, snap_file) != -1) {
 		restore_object(line);
 	}
