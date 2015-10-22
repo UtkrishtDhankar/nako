@@ -3,16 +3,13 @@
 #define KILOBYTE      1024
 #define HASH_STR_SIZE 40
 
-/*
- * Restores an object to the current directory
- * Here, snap_line is the line containing the hash and the name of the object
+/* 
+ * Writes the full name of the file (relative to project parent directory)
+ * to a char pointer on the heap. Remember to free this object after 
+ * calling this function
  */
-static void restore_object(const char *snap_line)
+static inline char *extract_name(const char *snap_line) 
 {
-	char hash[HASH_STR_SIZE + 1];
-
-	sscanf(snap_line, "%s", hash);
-
 	/* Allocating 1 KB of memory for object name. Will reallocate more
 	   space if needed. */
 	char *object_name = malloc(KILOBYTE * sizeof(*object_name));
@@ -28,7 +25,23 @@ static void restore_object(const char *snap_line)
 		}
 	}
 
+	return object_name;
+}
+
+/*
+ * Restores an object to the current directory
+ * Here, snap_line is the line containing the hash and the name of the object
+ */
+static void restore_object(const char *snap_line)
+{
+	char hash[HASH_STR_SIZE + 1];
+
+	sscanf(snap_line, "%s", hash);
+
+	char *object_name = extract_name(snap_line);
+
 	printf("HASH - %s\nNAME - %s", hash, object_name);
+	free(object_name);
 }
 
 void switch_to_snap(const char *snap_hash)
