@@ -1,6 +1,6 @@
 #include "snap.h"
 
-/* 
+/*
  * Gets the number of files inside the folder dirp.
  */
 int get_num_files(DIR *dirp)
@@ -17,8 +17,8 @@ int get_num_files(DIR *dirp)
 	return num_files;
 }
 
-/* 
- * Gets the number of directories inside dirp, excluding . and .. directories. 
+/*
+ * Gets the number of directories inside dirp, excluding . and .. directories.
  */
 int get_num_dirs(DIR *dirp)
 {
@@ -37,7 +37,7 @@ int get_num_dirs(DIR *dirp)
 }
 
 /* FIXME add a list of ignored directories and files */
-/* 
+/*
  * Snaps the contents of the file whose name relative to the project parent
  * directory is file_name. Doesn't create a new file if one already exists.
  * Returns the SHA1 hash of the file it snaps.
@@ -68,7 +68,7 @@ static char *snap_file(const char *file_name)
 	return file_hash;
 }
 
-/* Implementation is a few lines ahead. Subfunctions of snap_dir call 
+/* Implementation is a few lines ahead. Subfunctions of snap_dir call
    snap_dir, so we need a prototype */
 static char *snap_dir(const char *dir_name);
 
@@ -76,7 +76,7 @@ static char *snap_dir(const char *dir_name);
  * Writes out a formatted line to content, to be written in the object file
  * of dir_name. Part of the internals of snap_dir.
  */
-static inline void handle_file(char **content, const char *dir_name, 
+static inline void handle_file(char **content, const char *dir_name,
 			       const char *file_name)
 {
 	char *buf = NULL;
@@ -91,9 +91,9 @@ static inline void handle_file(char **content, const char *dir_name,
 }
 
 /*
- * Stores the line to be written in the snap file for the subdirectory 
+ * Stores the line to be written in the snap file for the subdirectory
  * subdir_name of dir_name inside content. Part of internals of snap_dir() */
-static inline void handle_dir(char **content, const char *dir_name, 
+static inline void handle_dir(char **content, const char *dir_name,
 			      const char *subdir_name)
 {
 	char *buf = NULL;
@@ -108,11 +108,11 @@ static inline void handle_dir(char **content, const char *dir_name,
 	free(buf);
 }
 
-/* 
+/*
  * Creates a snap file for the directory named dir_name, with the contents
  * dir_contents, whose size is num_contents.
  */
-static inline char *write_contents(      char **dir_contents, 
+static inline char *write_contents(      char **dir_contents,
 				   const char  *dir_name,
 				   const int    num_contents)
 {
@@ -148,7 +148,7 @@ static char *snap_dir(const char *dir_name)
 	int num_files = get_num_files(root);
 
 	/* Stores the contents of the snap file for the current directory. */
-	char **dir_contents = malloc((num_dirs + num_files) 
+	char **dir_contents = malloc((num_dirs + num_files)
 				* sizeof(*dir_contents));
 
 	int i = 0; /* Counter for storing things in dir_contents */
@@ -167,7 +167,7 @@ static char *snap_dir(const char *dir_name)
 			i++;
 		}
 	}
-	char *hash = write_contents(dir_contents, dir_name,i); 
+	char *hash = write_contents(dir_contents, dir_name,i);
 
 	for (int j = 0; j < i; j++)
 		free(dir_contents[j]);
@@ -177,7 +177,7 @@ static char *snap_dir(const char *dir_name)
 	return hash;
 }
 
-/* 
+/*
  * General purpose function to snap the changes in given files and directories
  * with the given snap message
  */
@@ -185,7 +185,7 @@ static char *snap(char **file_names, const int num_files,
 	   char **dir_names,  const int num_dirs,
 	   const char *message)
 {
-	char **snap_contents = malloc(((num_files + num_dirs) 
+	char **snap_contents = malloc(((num_files + num_dirs)
 				* sizeof(*snap_contents)));
 	int counter = 0;
 
@@ -235,7 +235,7 @@ static char *snap(char **file_names, const int num_files,
 	return hash;
 }
 
-/* 
+/*
  * Snaps all the files and folders inside the project parent directory
  */
 void snap_all(char *message)

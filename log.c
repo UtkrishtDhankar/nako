@@ -12,15 +12,15 @@ struct snap {
 /*
  * Compares two snaps for sorting.
  */
-static int snapcmp(const void *a, const void *b) 
+static int snapcmp(const void *a, const void *b)
 {
 	const struct snap *s1 = a;
 	const struct snap *s2 = b;
-	
+
 	return -strcmp(s1->time_str, s2->time_str);
 }
 
-/* 
+/*
  * Returns the number of files inside dirp.
  */
 inline static int get_num_files(DIR *dirp)
@@ -40,7 +40,7 @@ inline static int get_num_files(DIR *dirp)
 /*
  * Prints the snaps passed to it.
  */
-static inline void print_snaps(const int    num_snaps, 
+static inline void print_snaps(const int    num_snaps,
 			       const struct snap *snaps)
 {
 	for (int counter = 0; counter < num_snaps; counter++) {
@@ -55,7 +55,7 @@ static inline void print_snaps(const int    num_snaps,
 	}
 }
 
-/* 
+/*
  * Prints abbreviated SHA1 hashes, time of snap and snap_messages, sorted
  * by newest first.
  */
@@ -99,7 +99,7 @@ void show_snaps()
 	}
 
 	qsort(snaps, num_files, sizeof(*snaps), &snapcmp);
-	
+
 	print_snaps(num_files, snaps);
 
 	for (counter = 0; counter < num_files; counter++) {
