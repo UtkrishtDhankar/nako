@@ -33,10 +33,13 @@ static inline char *extract_name(const char *snap_line)
 	return object_name;
 }
 
+/* 
+ * Returns true if object is a directory, otherwise returns false.
+ */
 static inline bool is_dir(const char *object_name)
 {
 	size_t len = strlen(object_name);
-	if (object_name[len - 1] == '\\')
+	if (object_name[len - 1] == '/')
 		return true;
 	else
 		return false;
@@ -56,9 +59,9 @@ static void restore_object(const char *snap_line)
 	char *object_name = extract_name(snap_line);
 
 	if (is_dir(object_name)) {
-	;
+		printf("Directory\n");
 	} else {
-		;
+		printf("File\n");
 	}
 
 	printf("HASH - %s\nNAME - %s\n", hash, object_name);
