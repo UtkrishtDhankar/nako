@@ -4,9 +4,50 @@
 #define HASH_STR_SIZE 40
 
 /*
+ * Copies the source file's contents to dest.
+ */
+static inline void copy_file (FILE *dest, FILE *source)
+{
+	char ch;
+	while((ch = fgetc(source)) != EOF) {
+		fputc(ch, dest);
+	}
+}
+
+/*
+ * Restores the file whose name is name, and has the SHA1 digest hash.
+ */
+static void restore_file(const char *name, const char *hash)
+{
+	FILE *file  = fopen(name, "wx");
+
+	char *object_name = NULL;
+	asprintf(&object_name, "%s/%s", ".nako/objects",
+			hash);
+	FILE *object_file = fopen(object_name, "r");
+	free(object_name);
+
+	if (file == NULL) { /* If there was already a file of that name. */
+		char *file_hash = sha1(name);
+		if (strcmp(file_hash, hash) == 0) {
+			; /* The file hasn't been changed, nothing to do  */
+		} else {
+			file = fopen(name, "w");
+
+			copy_file(file, object_file);
+		}
+	} else {
+		copy_file(file, object_file);
+	}
+
+	fclose(file);
+	fclose(object_file);
+}
+
+/*
  * Writes the full name of the file (relative to project parent directory)
  * to a char pointer on the heap. Remember to free this object after
- * calling this function
+ * calling this function. This is part of the internals of restore_object().
  */
 static inline char *extract_name(const char *snap_line)
 {
@@ -33,8 +74,9 @@ static inline char *extract_name(const char *snap_line)
 	return object_name;
 }
 
-/* 
- * Returns true if object is a directory, otherwise returns false.
+/*
+ * Returns true if object is a directory, otherwise returns false. Is part of
+ * the internals of restore_object.
  */
 static inline bool is_dir(const char *object_name)
 {
@@ -61,10 +103,9 @@ static void restore_object(const char *snap_line)
 	if (is_dir(object_name)) {
 		printf("Directory\n");
 	} else {
-		printf("File\n");
+		restore_file(object_name, hash);
 	}
 
-	printf("HASH - %s\nNAME - %s\n", hash, object_name);
 	free(object_name);
 }
 

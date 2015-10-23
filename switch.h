@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include "sha1.h"
 
 void switch_to_snap(const char *snap_hash);
 
