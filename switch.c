@@ -33,9 +33,18 @@ static inline char *extract_name(const char *snap_line)
 	return object_name;
 }
 
+static inline bool is_dir(const char *object_name)
+{
+	size_t len = strlen(object_name);
+	if (object_name[len - 1] == '\\')
+		return true;
+	else
+		return false;
+}
+
 /*
  * Restores an object to the current directory
- * Here, snap_line is the line containing the hash and 
+ * Here, snap_line is the line containing the hash and
  * the name of the object.
  */
 static void restore_object(const char *snap_line)
@@ -45,6 +54,12 @@ static void restore_object(const char *snap_line)
 	sscanf(snap_line, "%s", hash);
 
 	char *object_name = extract_name(snap_line);
+
+	if (is_dir(object_name)) {
+	;
+	} else {
+		;
+	}
 
 	printf("HASH - %s\nNAME - %s\n", hash, object_name);
 	free(object_name);
