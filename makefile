@@ -24,6 +24,9 @@ clean: clean-objects
 clean-objects:
 	$(RM) $(RMFLAGS) *.o
 
+install:
+	mv nako /usr/local/bin
+
 debug: CFLAGS+=$(DFLAGS)
 debug: LFLAGS+=$(DFLAGS)
 debug: all
