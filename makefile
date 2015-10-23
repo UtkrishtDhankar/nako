@@ -27,6 +27,9 @@ clean-objects:
 install:
 	sudo mv nako /usr/local/bin
 
+uninstall:
+	sudo rm -f /usr/local/bin/nako
+
 debug: CFLAGS+=$(DFLAGS)
 debug: LFLAGS+=$(DFLAGS)
 debug: all
