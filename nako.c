@@ -39,6 +39,8 @@ int main(int argc, char *argv[])
 			;
 		else if (strcmp(argv[1], "log") == 0)
 			show_commits();
+		else if (strcmp(argv[1], "clean") == 0)
+			init_clean();
 		else
 			print_usage();
 	} else
