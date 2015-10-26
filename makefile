@@ -8,7 +8,7 @@ RM=rm
 RMFLAGS=-f
 
 # Source files in the project. Append new files here.
-SRCS=init.c snap.c nako.c sha1.c log.c
+SRCS=init.c snap.c nako.c sha1.c log.c clean.c
 
 # Create object files list from source files list.
 OBJS= $(SRCS:.c=.o)

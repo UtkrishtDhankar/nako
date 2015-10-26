@@ -17,16 +17,3 @@ int init_repo()
 		return 0;
 	}
 }
-
-int init_clean()
-{
-	struct stat st;
-
-	if(stat(".nako", &st) == -1) {
-		printf("Error, there is no repo in this directory\n");
-		return 1;
-	} else {
-		system("rm -rf  .nako");
-		return 0;
-	}
-}

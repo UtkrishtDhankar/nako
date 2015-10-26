@@ -9,6 +9,5 @@
  * Initialises a nako repository in the current folder.
  */
 int init_repo();
-int init_clean();
 
 #endif
