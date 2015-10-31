@@ -15,36 +15,6 @@ static inline void copy_file (FILE *dest, FILE *source)
 }
 
 /*
- * Restores the file whose name is name, and has the SHA1 digest hash.
- */
-static void restore_file(const char *name, const char *hash)
-{
-	FILE *file  = fopen(name, "wx");
-
-	char *object_name = NULL;
-	asprintf(&object_name, "%s/%s", ".nako/objects",
-			hash);
-	FILE *object_file = fopen(object_name, "r");
-	free(object_name);
-
-	if (file == NULL) { /* If there was already a file of that name. */
-		char *file_hash = sha1(name);
-		if (strcmp(file_hash, hash) == 0) {
-			; /* The file hasn't been changed, nothing to do  */
-		} else {
-			file = fopen(name, "w");
-
-			copy_file(file, object_file);
-		}
-	} else {
-		copy_file(file, object_file);
-	}
-
-	fclose(file);
-	fclose(object_file);
-}
-
-/*
  * Writes the full name of the file (relative to project parent directory)
  * to a char pointer on the heap. Remember to free this object after
  * calling this function. This is part of the internals of restore_object().
@@ -85,6 +55,36 @@ static inline bool is_dir(const char *object_name)
 		return true;
 	else
 		return false;
+}
+
+/*
+ * Restores the file whose name is name, and has the SHA1 digest hash.
+ */
+static void restore_file(const char *name, const char *hash)
+{
+	FILE *file  = fopen(name, "wx");
+
+	char *object_name = NULL;
+	asprintf(&object_name, "%s/%s", ".nako/objects",
+			hash);
+	FILE *object_file = fopen(object_name, "r");
+	free(object_name);
+
+	if (file == NULL) { /* If there was already a file of that name. */
+		char *file_hash = sha1(name);
+		if (strcmp(file_hash, hash) == 0) {
+			; /* The file hasn't been changed, nothing to do  */
+		} else {
+			file = fopen(name, "w");
+
+			copy_file(file, object_file);
+		}
+	} else {
+		copy_file(file, object_file);
+	}
+
+	fclose(file);
+	fclose(object_file);
 }
 
 /*
