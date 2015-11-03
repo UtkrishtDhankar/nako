@@ -145,7 +145,7 @@ char *snap(char **file_names, const int num_files,
 		char *hash = snap_dir(dir_names[i]);
 
 		snap_contents[counter] = NULL;
-		asprintf(&snap_contents[counter], "%s %s/", hash, file_names[i]);
+		asprintf(&snap_contents[counter], "%s %s/", hash, dir_names[i]);
 		counter++;
 
 		free(hash);
