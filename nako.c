@@ -9,7 +9,7 @@ void print_no_repo()
 {
 	printf("Error. There is no nako repo in this directory.\n"
 	       "Create one by typing the following command -\n\n"
-	       "nako init\n\n");
+	       "\tnako init\n\n");
 }
 
 void print_usage()
