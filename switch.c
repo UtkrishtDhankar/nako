@@ -87,12 +87,47 @@ static void restore_file(const char *name, const char *hash)
 	fclose(object_file);
 }
 
+/* restore_directory needs to call restore_object on each object inside it.
+   I still don't like this circular dependency thing. We need to find a way to
+   make this cleaner. */
+static void restore_object(const char *snap_line);
+
+/*
+ * Restores a directory with the name name (relative to the parent directory)
+ * and the hash hash.
+ */
+static void restore_directory(const char *name, const char *hash)
+{
+	DIR *dir = opendir(name);
+	if (dir == NULL) /* Directory doesn't exist, need to create it. */
+		mkdir(name, 0777);
+
+	closedir(dir);
+
+	char *object_name = NULL;
+	asprintf(&object_name, "%s/%s", ".nako/objects",
+			hash);
+	FILE *object_file = fopen(object_name, "r");
+	free(object_name);
+
+	char   *line   = NULL;
+	size_t linecap = 0;
+
+	/* Skip over the name of the directory. */
+	getline(&line, &linecap, object_file);
+
+	while (getline(&line, &linecap, object_file) != -1) {
+		printf("Restoring %s\n", line);
+		restore_object(line);
+	}
+}
+
 /*
  * Restores an object to the current directory
  * Here, snap_line is the line containing the hash and
  * the name of the object.
  */
-static void restore_object(const char *snap_line)
+void restore_object(const char *snap_line)
 {
 	char hash[HASH_STR_SIZE + 1];
 
@@ -101,7 +136,7 @@ static void restore_object(const char *snap_line)
 	char *object_name = extract_name(snap_line);
 
 	if (is_dir(object_name)) {
-		printf("Directory\n");
+		restore_directory(object_name, hash);
 	} else {
 		restore_file(object_name, hash);
 	}
