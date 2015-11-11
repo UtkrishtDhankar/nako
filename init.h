@@ -7,6 +7,7 @@
 /*
  * Initialises a nako repository in the current folder.
  */
+int repo_status();
 int init_repo();
 
 #endif

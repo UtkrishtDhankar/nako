@@ -1,19 +1,24 @@
 #include "init.h"
 
-int init_repo()
+int repo_status()
 {
 	struct stat st;
 
-	if (stat(".nako", &st) != -1) {
-		printf("Error, there is already a repo in this directory\n");
+	if (stat(".nako", &st) != -1)
 		return 1;
-	} else {
+	else
+		return 0;
+}
+
+int init_repo()
+{
+	if (repo_status() == 0) {
 		mkdir(".nako", 0777);
 		mkdir(".nako/objects", 0777);
 		mkdir(".nako/branches", 0777);
 		mkdir(".nako/snaps", 0777);
 		mkdir(".nako/tags", 0777);
-
-		return 0;
-	}
+	} else
+		printf("Error, there is already a repo in this directory\n");
+	return 0;
 }
