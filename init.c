@@ -44,6 +44,13 @@ int rmrf(char *path)
 
 int remove_repo()
 {
-	rmrf(".nako");
+	printf("Do you really want to remove the nako repo? <y/n> = ");
+	char ch = getchar();
+
+	if(ch == 'y' || ch == 'Y') {
+		rmrf(".nako");
+		printf("Deleted nako repo from this directory.\n");
+	} else
+		printf("The nako repo was not deleted.\n");
 	return 0;
 }
