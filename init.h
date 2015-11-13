@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <sys/stat.h>
+#include <stdlib.h>
 
 /*
  * Initialises a nako repository in the current folder.
