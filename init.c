@@ -22,3 +22,27 @@ int init_repo()
 		printf("Error, there is already a repo in this directory\n");
 	return 0;
 }
+
+int unlink_cb(const char *fpath, const struct stat *sb, int typeflag, struct FTW *ftwbuf)
+{
+	int rv = remove(fpath);
+
+	if (rv)
+		perror(fpath);
+
+	return rv;
+}
+
+/*
+ * Deleting files by "File Tree Walk" using nftw()
+ */
+int rmrf(char *path)
+{
+	return nftw(path, unlink_cb, 64, FTW_DEPTH | FTW_PHYS);
+}
+
+int remove_repo()
+{
+	rmrf(".nako");
+	return 0;
+}
