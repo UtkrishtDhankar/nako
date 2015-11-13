@@ -19,7 +19,7 @@ int init_repo()
 		mkdir(".nako/snaps", 0777);
 		mkdir(".nako/tags", 0777);
 	} else
-		printf("Error, there is already a repo in this directory\n");
+		printf("Error. There is already a repo in this directory.\n");
 	return 0;
 }
 
