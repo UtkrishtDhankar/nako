@@ -26,6 +26,10 @@ int init_repo()
 int unlink_all(const char *fpath, const struct stat *sb,
 	       int typeflag, struct FTW *ftwbuf)
 {
+	(void)sb;
+	(void)typeflag;
+	(void)ftwbuf;
+
 	int rv = remove(fpath);
 
 	if (rv != 0)
@@ -47,7 +51,7 @@ int remove_repo()
 	printf("Do you really want to remove the nako repo? <y/n> = ");
 	char ch = getchar();
 
-	if(ch == 'y' || ch == 'Y') {
+	if (ch == 'y' || ch == 'Y') {
 		rmrf(".nako");
 		printf("Deleted nako repo from this directory.\n");
 	} else
