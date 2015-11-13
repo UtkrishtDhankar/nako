@@ -51,6 +51,11 @@ int main(int argc, char *argv[])
 				show_commits();
 			else
 				print_no_repo();
+		} else if (strcmp(argv[1], "clean") == 0) {
+			if(repo_status() == 1)
+				remove_repo();
+			else
+				print_no_repo();
 		} else
 			print_usage();
 	} else

@@ -23,11 +23,12 @@ int init_repo()
 	return 0;
 }
 
-int unlink_cb(const char *fpath, const struct stat *sb, int typeflag, struct FTW *ftwbuf)
+int unlink_all(const char *fpath, const struct stat *sb,
+	       int typeflag, struct FTW *ftwbuf)
 {
 	int rv = remove(fpath);
 
-	if (rv)
+	if (rv != 0)
 		perror(fpath);
 
 	return rv;
@@ -38,7 +39,7 @@ int unlink_cb(const char *fpath, const struct stat *sb, int typeflag, struct FTW
  */
 int rmrf(char *path)
 {
-	return nftw(path, unlink_cb, 64, FTW_DEPTH | FTW_PHYS);
+	return nftw(path, unlink_all, 64, FTW_DEPTH | FTW_PHYS);
 }
 
 int remove_repo()
