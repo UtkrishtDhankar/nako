@@ -79,7 +79,7 @@ char *snap_dir(const char *dir_name)
 			char *hash = snap_file(buf);
 
 			dir_contents[i] = NULL;
-			asprintf(&dir_contents[i], "%s %s/", hash, buf);
+			asprintf(&dir_contents[i], "%s %s", hash, buf);
 
 			i++;
 			free(hash);
