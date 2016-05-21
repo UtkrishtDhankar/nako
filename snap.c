@@ -1,6 +1,8 @@
 #include "snap.h"
 
-/* http://stackoverflow.com/questions/1121383/counting-the-number-of-files-in-a-directory-using-c */
+/*
+ * Gets the number of files inside the folder dirp.
+ */
 int get_num_files(DIR *dirp)
 {
 	int num_files = 0;
@@ -15,7 +17,9 @@ int get_num_files(DIR *dirp)
 	return num_files;
 }
 
-/* http://stackoverflow.com/questions/1121383/counting-the-number-of-files-in-a-directory-using-c */
+/*
+ * Gets the number of directories inside dirp, excluding . and .. directories.
+ */
 int get_num_dirs(DIR *dirp)
 {
 	int num_dirs = 0;
@@ -33,8 +37,12 @@ int get_num_dirs(DIR *dirp)
 }
 
 /* FIXME add a list of ignored directories and files */
-
-char *snap_file(const char *file_name)
+/*
+ * Snaps the contents of the file whose name relative to the project parent
+ * directory is file_name. Doesn't create a new file if one already exists.
+ * Returns the SHA1 hash of the file it snaps.
+ */
+static char *snap_file(const char *file_name)
 {
 	char *file_hash = sha1(file_name);
 	/* 14 bytes for ".nako/objects/", rest for hash and '\0'. */
@@ -43,6 +51,7 @@ char *snap_file(const char *file_name)
 
 	FILE *input_file = fopen(file_name, "r");
 	FILE *object_file = fopen(object_path, "wx");
+
 	if (object_file != NULL) {
 		char ch;
 		while ((ch = getc(input_file)) != EOF)
@@ -59,60 +68,60 @@ char *snap_file(const char *file_name)
 	return file_hash;
 }
 
-char *snap_dir(const char *dir_name)
+/* Implementation is a few lines ahead. Subfunctions of snap_dir call
+   snap_dir, so we need a prototype */
+static char *snap_dir(const char *dir_name);
+
+/*
+ * Writes out a formatted line to content, to be written in the object file
+ * of dir_name. Part of the internals of snap_dir.
+ */
+static inline void handle_file(char **content, const char *dir_name,
+			       const char *file_name)
 {
-	DIR *root = opendir(dir_name);
+	char *buf = NULL;
+	asprintf(&buf, "%s/%s", dir_name, file_name);
 
-	struct dirent *dp;
+	char *hash = snap_file(buf);
 
-	int num_dirs  = get_num_dirs(root);
-	int num_files = get_num_files(root);
+	asprintf(content, "%s %s", hash, buf);
 
-	char **dir_contents = malloc((num_dirs + num_files) * sizeof(*dir_contents));
-	int i = 0;
+	free(hash);
+	free(buf);
+}
 
-	while ((dp = readdir(root)) != NULL) {
-		if (dp->d_type == DT_REG) {
-			char *buf = NULL;
-			asprintf(&buf, "%s/%s", dir_name, dp->d_name);
+/*
+ * Stores the line to be written in the snap file for the subdirectory
+ * subdir_name of dir_name inside content. Part of internals of snap_dir() */
+static inline void handle_dir(char **content, const char *dir_name,
+			      const char *subdir_name)
+{
+	char *buf = NULL;
+	asprintf(&buf, "%s/%s", dir_name, subdir_name);
 
-			char *hash = snap_file(buf);
+	char *hash = snap_dir(buf);
 
-			dir_contents[i] = NULL;
-			asprintf(&dir_contents[i], "%s %s/", hash, buf);
+	content = NULL;
+	asprintf(content, "%s %s/", hash, buf);
 
-			i++;
-			free(hash);
-			free(buf);
-		} else if (dp->d_type == DT_DIR) {
-			if (strcmp(dp->d_name, ".")     == 0 ||
-			    strcmp(dp->d_name, "..")    == 0)
-				continue;
+	free(hash);
+	free(buf);
+}
 
-			char *buf = NULL;
-			asprintf(&buf, "%s/%s", dir_name, dp->d_name);
-
-			char *hash = snap_dir(buf);
-
-			dir_contents[i] = NULL;
-			asprintf(&dir_contents[i], "%s %s/", hash, buf);
-
-			i++;
-			free(hash);
-			free(buf);
-		}
-	}
-
+/*
+ * Creates a snap file for the directory named dir_name, with the contents
+ * dir_contents, whose size is num_contents.
+ */
+static inline char *write_contents(      char **dir_contents,
+				   const char  *dir_name,
+				   const int    num_contents)
+{
 	FILE *f = fopen(".nako/objects/temp", "w");
 	fprintf(f, "%s\n", dir_name);
 
-	for (int j = 0; j < i; j++) {
+	for (int j = 0; j < num_contents; j++) {
 		fprintf(f, "%s\n", dir_contents[j]);
-		free(dir_contents[j]);
 	}
-
-	free(dir_contents);
-	fclose(f);
 
 	char *hash = sha1(".nako/objects/temp");
 
@@ -121,14 +130,63 @@ char *snap_dir(const char *dir_name)
 
 	rename(".nako/objects/temp", dir_file_name);
 	free(dir_file_name);
+
 	return hash;
 }
 
-char *snap(char **file_names, const int num_files,
+/*
+ * Snaps the contents of the directory dir_name recursively.
+ * Returns a SHA1 hash of the snap file of the directory.
+ */
+static char *snap_dir(const char *dir_name)
+{
+	DIR *root = opendir(dir_name);
+
+	struct dirent *dp;
+
+	int num_dirs  = get_num_dirs(root);
+	int num_files = get_num_files(root);
+
+	/* Stores the contents of the snap file for the current directory. */
+	char **dir_contents = malloc((num_dirs + num_files)
+				* sizeof(*dir_contents));
+
+	int i = 0; /* Counter for storing things in dir_contents */
+
+	while ((dp = readdir(root)) != NULL) {
+		if (dp->d_type == DT_REG) {
+			handle_file(&dir_contents[i], dir_name ,dp->d_name);
+
+			i++;
+		} else if (dp->d_type == DT_DIR) {
+			if (strcmp(dp->d_name, ".")     == 0 ||
+			    strcmp(dp->d_name, "..")    == 0)
+				continue;
+			handle_dir(&dir_contents[i], dir_name, dp->d_name);
+
+			i++;
+		}
+	}
+	char *hash = write_contents(dir_contents, dir_name,i);
+
+	for (int j = 0; j < i; j++)
+		free(dir_contents[j]);
+
+	free(dir_contents);
+
+	return hash;
+}
+
+/*
+ * General purpose function to snap the changes in given files and directories
+ * with the given snap message
+ */
+static char *snap(char **file_names, const int num_files,
 	   char **dir_names,  const int num_dirs,
 	   const char *message)
 {
-	char **snap_contents = malloc(((num_files + num_dirs) * sizeof(*snap_contents)));
+	char **snap_contents = malloc(((num_files + num_dirs)
+				* sizeof(*snap_contents)));
 	int counter = 0;
 
 	for (int i = 0; i < num_files; i++) {
@@ -177,6 +235,9 @@ char *snap(char **file_names, const int num_files,
 	return hash;
 }
 
+/*
+ * Snaps all the files and folders inside the project parent directory
+ */
 void snap_all(char *message)
 {
 	DIR *root = opendir(".");

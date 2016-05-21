@@ -1,5 +1,7 @@
 #include "init.h"
 
+#define MODE 0777
+
 int init_repo()
 {
 	struct stat st;
@@ -8,11 +10,11 @@ int init_repo()
 		printf("Error, there is already a repo in this directory\n");
 		return 1;
 	} else {
-		mkdir(".nako", 0777);
-		mkdir(".nako/objects", 0777);
-		mkdir(".nako/branches", 0777);
-		mkdir(".nako/snaps", 0777);
-		mkdir(".nako/tags", 0777);
+		mkdir(".nako", MODE);
+		mkdir(".nako/objects", MODE);
+		mkdir(".nako/branches", MODE);
+		mkdir(".nako/snaps", MODE);
+		mkdir(".nako/tags", MODE);
 
 		return 0;
 	}
